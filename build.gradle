@@ -5,7 +5,8 @@ plugins {
 
 ext {
     //legyver dependencies
-    fenxlibVersion = '2.1.0.0'
+    fenxlibVersion = '2.1.2.0'
+    legyverUtilsVersion = '2.1.1.0'
     //apache dependencies
     commonsLogVersion = '2.13.3'
     commonsLangVersion = '3.11'
@@ -20,16 +21,19 @@ repositories {
 }
 
 dependencies {
-    //about
     implementation group: 'com.legyver', name: 'fenxlib.extensions.tuktukfx', version: fenxlibVersion
     implementation group: 'com.legyver', name: 'fenxlib.widgets.about', version: fenxlibVersion
     implementation group: 'com.legyver', name: 'fenxlib.widgets.filetree', version: fenxlibVersion
     implementation group: 'com.legyver', name: 'fenxlib.controls.svg', version: fenxlibVersion
     implementation group: 'com.legyver', name: 'fenxlib.icons.fa', version: fenxlibVersion
+    implementation group: 'com.legyver', name: 'utils.graphjxml', version: legyverUtilsVersion
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: commonsLangVersion
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: commonsLogVersion
-    implementation group: 'org.codehaus.woodstox', name: 'stax2-api', version: '4.2.1'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.21.0'
 }
 
 application {
@@ -42,6 +46,10 @@ run {
     jvmArgs = [
             '--add-opens=java.base/java.lang.reflect=com.jfoenix'
     ]
+}
+
+test {
+    useJUnitPlatform()
 }
 
 java {
