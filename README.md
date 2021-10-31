@@ -85,6 +85,16 @@ Commands themselves can be typed in any case, ie: SELECT is the same as select, 
 
 </table>
 
+#### Three-part command condition structure
+All conditions must have three parts
+1. column
+2. comparison
+3. value 
+
+<table>
+<tr><td>Wrong</td><td>Correct</td></tr>
+<tr><td>column is not null</td><td>column not null</td></tr>
+</table>
 
 ## API
 SQL-like
