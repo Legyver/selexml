@@ -49,20 +49,42 @@ Thus consider the following
    2. Since we can represent named attributes as elements (1.2 above), attributes can be similarly mapped
 
 ### Extensions to the SQL concept
+#### Pseudo-reference prefixes
 So you might be thinking, if both elements and attributes map to tables and columns won't they interfere?
 
-We added a couple pseudo-references to allow for filtering to alleviate this
+Loosely analogous to schemas, pseudo-references allow for filtering to alleviate this.  However, unlike schemas, these can be applied individually to any column or table reference
 * $e is a shortcut for elements
 ```roomsql
-  select $e:column1, $e:column2 from $e:table
+  select $e:column1, $e:column2 from $e:table where $e:column1 = a value
 ```
 * $a is a shortcut for attributes
 ```roomsql
-  select $a:column1, $a:column2 from $a:table
+  select $a:column1, $a:column2 from $a:table where $a:column1 = a value
 ```
 
 These can be mixed-and-matched.  If there is no pseudo-reference prefix, both are searched
-## Language
+
+#### Case-sensitivity
+All comparisons are case-sensitive by default.  Appending an underscore to the command turns off case sensitivity
+
+##### Supported comparisons
+<table>
+<tr><td>Case sensitive</td><td>example</td><td>Case insensitive</td><td>example</td></tr>
+<tr><td>is</td><td>column is value</td><td>is_</td><td>column is_ value</td></tr>
+<tr><td>is</td><td>column is null</td><td></td><td></td></tr>
+<tr><td>=</td><td>column = value</td><td>=_</td><td>column =_ value</td></tr>
+
+<tr><td>not</td><td>column not value</td><td>not_</td><td>column not_ value</td></tr>
+<tr><td>not</td><td>column not null</td><td></td><td></td></tr>
+<tr><td>!=</td><td>column != value</td><td>!=_</td><td>column !=_ value</td></tr>
+<tr><td><></td><td>column <> value</td><td><>_</td><td>column <>_ value</td></tr>
+
+<tr><td>like</td><td>column like p_tt%rn</td><td>like_</td><td>column like_ P_TT%RN</td></tr>
+
+</table>
+
+
+## API
 SQL-like
 * Select all values from all elements
     * SQL analogy: select * from UNION(select * from table1, select * from table2, ...)
@@ -70,7 +92,7 @@ SQL-like
 select * from *
 ```
 
-* Select all values one-or-more elements or attributes
+* Select all values from one-or-more elements or attributes
   * SQL analogy: select * from table
 ```roomsql
 select * from course
@@ -94,4 +116,11 @@ select reg_num, subj, crs from course
 ```roomsql
 select * from course where instructor = Kaplan
 select * from course where instructor = Kaplan, days = T,W and is_full = false
+select * from course where instructor = Kaplan and days = T,W and is_full = false
 ```
+
+## Roadmap
+### Bugs
+* Handle semi-colons at line endings
+### New functionality
+* GUI for command execution
