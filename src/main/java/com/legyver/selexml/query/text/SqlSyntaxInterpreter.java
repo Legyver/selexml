@@ -79,7 +79,7 @@ public class SqlSyntaxInterpreter {
     private XmlWhereCondition parseCondition(String text, String variableName, String condition, String value, StringTokenizer stringTokenizer) throws QuerySyntaxException {
         XmlWhereCondition xmlWhereCondition;
         //below to handle cases where clauses are separated with ',' instead of 'and'
-        if (value.endsWith(",")) {
+        if (value.endsWith(",") || (!stringTokenizer.hasMoreTokens() && value.endsWith(";"))) {
             value = value.substring(0, value.length() - 1);
         }
         XmlNodeSelector xmlNodeSelector = parseSelector(variableName);
@@ -122,6 +122,9 @@ public class SqlSyntaxInterpreter {
 
     private String processMulti(List<XmlNodeSelector> selections, StringTokenizer stringTokenizer, String stoppingKeyword) {
         String next = stringTokenizer.nextToken();
+        if (!stringTokenizer.hasMoreTokens() && next.endsWith(";")) {
+            next = next.substring(0, next.length() - 1);
+        }
         if (XmlGraphSearchConstants.ALL.equals(next)) {
             selections.add(new XmlNodeSelector(next, null));
             //we need to read next token to say consistent with else block

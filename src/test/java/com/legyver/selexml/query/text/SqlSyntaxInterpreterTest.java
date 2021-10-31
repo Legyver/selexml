@@ -31,7 +31,6 @@ public class SqlSyntaxInterpreterTest {
 
     @Test
     public void selectAllFromAllNoWhere() throws Exception {
-        String clause = "select * from *";
         ThrowingConsumer<XmlGraphSearchCriteria> test = (xmlGraphSearchCriteria) -> {
             assertSelectAllFromAll(xmlGraphSearchCriteria);
 
@@ -39,7 +38,8 @@ public class SqlSyntaxInterpreterTest {
             WhereAsserter whereAsserter = new WhereAsserter();
             whereAsserter.doAssert(xmlWhereClause);
         };
-        runUpperAndLower(clause, test);
+        runUpperAndLower("select * from *", test);
+        runUpperAndLower("select * from *;", test);
     }
 
     @Test
@@ -54,6 +54,16 @@ public class SqlSyntaxInterpreterTest {
         };
         runUpperAndLower("select * from * where instructor = Kaplan", testEq);
         runUpperAndLower("select * from * where instructor is Kaplan", testEq);
+        runUpperAndLower("select * from * where instructor is Kaplan;", testEq);
+
+        //equals comma-delimited
+        ThrowingConsumer<XmlGraphSearchCriteria> testCommaDelimited = (xmlGraphSearchCriteria) -> {
+            assertSelectAllFromAll(xmlGraphSearchCriteria);
+
+            WhereAsserter whereAsserter = new WhereAsserter(new WhereConditionAsserter(null,
+                    "day", XmlSelectConditionMatchType.IS, "T,W"));
+            whereAsserter.doAssert(xmlGraphSearchCriteria.getWhere());
+        };
 
         //equals ignore case
         ThrowingConsumer<XmlGraphSearchCriteria> testEIC = (xmlGraphSearchCriteria) -> {
@@ -193,6 +203,7 @@ public class SqlSyntaxInterpreterTest {
             whereAsserter.doAssert(criteria.getWhere());
         };
         runUpperAndLower("select * from course", test);
+        runUpperAndLower("select * from course;", test);
 
         //multiple values in the select clause
         ThrowingConsumer<XmlGraphSearchCriteria> testMulti = (criteria) -> {
