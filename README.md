@@ -67,6 +67,7 @@ These can be mixed-and-matched.  If there is no pseudo-reference prefix, both ar
 #### Case-sensitivity
 All comparisons are case-sensitive by default.  Appending an underscore to the command turns off case sensitivity
 
+Commands themselves can be typed in any case, ie: SELECT is the same as select, FROM is the same as from, IS is the same as is, etc.
 ##### Supported comparisons
 <table>
 <tr><td>Case sensitive</td><td>example</td><td>Case insensitive</td><td>example</td></tr>
@@ -122,5 +123,6 @@ select * from course where instructor = Kaplan and days = T,W and is_full = fals
 ## Roadmap
 ### Bugs
 * Handle semi-colons at line endings
+* Column/Table names should be case-insensitive
 ### New functionality
 * GUI for command execution
