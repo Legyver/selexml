@@ -44,6 +44,7 @@ Thus consider the following
    1. Any element tag like &lt;course&gt; can be mapped to a table named 'course'
    2. Any attribute like &lt;attr course="20573"&gt; can be mapped to an element like &lt;course&gt;20573&lt;/course>
    3. Therefore, named attributes can also be mapped to tables.
+   4. Nested elements/attributes become their own table based on their name.  If their name is the same as a parent element, these contexts will be merged for the context of search, but split out to their original hierarchy in the result tree.
 2. Mapping XML to columns
    1. Any element like &lt;reg_num&gt;10577&lt;/reg_num&gt;can be mapped to a column named 'reg_num'
    2. Since we can represent named attributes as elements (1.2 above), attributes can be similarly mapped
@@ -87,6 +88,19 @@ Commands themselves can be typed in any case, ie: SELECT is the same as select, 
 
 ## API
 SQL-like
+### Select
+* Select all xml elements
+    * SQL analogy: select all columns from a table
+```roomsql
+select * from course
+```
+* Specific the XML element elements/attributes to include
+    * SQL analogy: selecting specific columns from a table
+```roomsql
+select reg_num, subj, crs from course
+```
+
+### From
 * Select all values from all elements
     * SQL analogy: select * from UNION(select * from table1, select * from table2, ...)
 ```roomsql
@@ -94,7 +108,7 @@ select * from *
 ```
 
 * Select all values from one-or-more elements or attributes
-  * SQL analogy: select * from table
+  * SQL analogy: select * from a specific table
 ```roomsql
 select * from course
 select * from course, lab, lecture
@@ -106,12 +120,7 @@ select * from $e:course
 select * from $a:course
 ```
 
-* Specific the XML element elements/attributes to include
-    * SQL analogy: selecting columns
-```roomsql
-select reg_num, subj, crs from course
-```
-
+### Where
 * Select all values meeting one-or-more conditions
   * SQL analogy: where clause in select statements
 ```roomsql
