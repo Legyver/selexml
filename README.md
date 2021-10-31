@@ -141,7 +141,6 @@ select * from course where instructor = Kaplan and days = T,W and is_full = fals
 
 ## Roadmap
 ### Bugs
-* Handle semi-colons at line endings
 * Column/Table names should be case-insensitive
 ### New functionality
 * GUI for command execution
