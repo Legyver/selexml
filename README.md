@@ -142,6 +142,5 @@ select * from course where instructor = Kaplan and days = T,W and is_full = fals
 ## Roadmap
 ### Bugs
 * Column/Table names should be case-insensitive
-* Remove should only be shown at the top-level nodes in the tree
 ### New functionality
 * GUI for command execution
