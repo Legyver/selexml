@@ -1,57 +1,19 @@
-plugins {
-    id 'java'
-    id 'application'
+allprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
 }
 
-ext {
-    //legyver dependencies
-    fenxlibVersion = '2.1.2.1'
-    legyverUtilsVersion = '2.1.1.0'
-    //apache dependencies
-    commonsLogVersion = '2.13.3'
-    commonsLangVersion = '3.11'
-}
-
-group 'com.legyver'
-version '1.0-SNAPSHOT'
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-}
-
-dependencies {
-    implementation group: 'com.legyver', name: 'fenxlib.extensions.tuktukfx', version: fenxlibVersion
-    implementation group: 'com.legyver', name: 'fenxlib.widgets.about', version: fenxlibVersion
-    implementation group: 'com.legyver', name: 'fenxlib.widgets.filetree', version: fenxlibVersion
-    implementation group: 'com.legyver', name: 'fenxlib.controls.svg', version: fenxlibVersion
-    implementation group: 'com.legyver', name: 'fenxlib.icons.fa', version: fenxlibVersion
-    implementation group: 'com.legyver', name: 'utils.graphjxml', version: legyverUtilsVersion
-
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: commonsLangVersion
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: commonsLogVersion
-
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.21.0'
-}
-
-application {
-    mainModule = 'com.legyver.fenxlib.samples.about' // name defined in module-info.java
-    mainClass = 'com.legyver.fenxlib.samples.about.MyApplication'
-}
-
-run {
-    //workaround for https://github.com/sshahine/JFoenix/issues/955
-    jvmArgs = [
-            '--add-opens=java.base/java.lang.reflect=com.jfoenix'
-    ]
-}
-
-test {
-    useJUnitPlatform()
-}
-
-java {
-    modularity.inferModulePath = true
+subprojects {
+    ext {
+        //legyver dependencies
+        fenxlibVersion = '2.1.2.2'
+        legyverUtilsVersion = '2.1.1.2'
+        //apache dependencies
+        commonsLogVersion = '2.13.3'
+        commonsLangVersion = '3.11'
+        publishBuildScript = 'https://raw.githubusercontent.com/Legyver/common-build/1.5/publish.gradle' //java 9+ single-module
+    }
 }

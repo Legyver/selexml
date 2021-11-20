@@ -1,1 +1,4 @@
 rootProject.name = 'selexml'
+
+include ':selexml.api'
+include ':selexml.app'
