@@ -9,8 +9,7 @@ public class SelexmlVersionInfo {
 
     public SelexmlVersionInfo() {
         aboutPageOptions = new AboutPageOptions.Builder(getClass())
-                .dependenciesFile("licenses/license.properties")
-                .buildPropertiesFile("buildlabel.properties")
+                .buildPropertiesFile("build.properties")
                 .copyrightPropertiesFile("copyright.properties")
                 .title("Selexml")
                 .intro("Query your xml with Selexml")

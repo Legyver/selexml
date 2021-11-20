@@ -15,7 +15,7 @@ import com.legyver.fenxlib.widgets.filetree.factory.TreeItemChildFactory;
 import com.legyver.fenxlib.widgets.filetree.registry.FileTreeRegistry;
 import com.legyver.fenxlib.widgets.filetree.scan.FileWatchHandler;
 import com.legyver.selexml.app.config.ApplicationOptionsBuilder;
-import com.legyver.selexml.config.SelexmlConfig;
+import com.legyver.selexml.app.config.SelexmlConfig;
 import com.legyver.selexml.app.config.SelexmlVersionInfo;
 import com.legyver.selexml.app.factory.MenuRegionFactory;
 import com.legyver.selexml.app.factory.SelexmlTreeItemFactory;
@@ -29,6 +29,8 @@ import javafx.stage.Stage;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.net.URL;
 
 public class MainApplication extends Application {
 
@@ -62,7 +64,11 @@ public class MainApplication extends Application {
             uiModel = (ApplicationUIModel) ApplicationContext.getUiModel();
             selexmlVersionInfo = new SelexmlVersionInfo();
 
-            SceneFactory sceneFactory = new SceneFactory(primaryStage, 1100, 750, MainApplication.class.getClassLoader().getResource("css/application.css"));
+            URL stylesheet = MainApplication.class.getResource("application.css");
+            if (stylesheet == null) {
+                logger.error("unable to load stylesheet");
+            }
+            SceneFactory sceneFactory = new SceneFactory(primaryStage, 1100, 750, stylesheet);
 
             //Any files added via import or filesystem watches on added directories will be added here
             FileTreeRegistry fileTreeRegistry = new FileTreeRegistry();

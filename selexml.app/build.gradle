@@ -7,6 +7,7 @@ group 'com.legyver'
 
 dependencies {
     implementation project(':selexml.api')
+
     implementation group: 'com.legyver', name: 'fenxlib.extensions.tuktukfx', version: fenxlibVersion
     implementation group: 'com.legyver', name: 'fenxlib.widgets.about', version: fenxlibVersion
     implementation group: 'com.legyver', name: 'fenxlib.widgets.filetree', version: fenxlibVersion
@@ -22,8 +23,8 @@ dependencies {
 }
 
 application {
-    mainModule = 'com.legyver.selexml.samples.about' // name defined in module-info.java
-    mainClass = 'com.legyver.fenxlib.samples.about.MyApplication'
+//    mainModule = 'com.legyver.selexml.app' // name defined in module-info.java
+    mainClass = 'com.legyver.selexml.app.MainApplication'
 }
 
 run {

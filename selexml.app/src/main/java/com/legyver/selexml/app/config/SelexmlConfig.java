@@ -1,4 +1,4 @@
-package com.legyver.selexml.config;
+package com.legyver.selexml.app.config;
 
 import com.legyver.fenxlib.core.impl.config.JsonApplicationConfig;
 
