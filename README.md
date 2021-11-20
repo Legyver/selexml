@@ -162,6 +162,6 @@ Release.Breaking.Feature.Fix
 - Feature: Used when introducing features that do not break backward compatability.
 - Fix: Used for small bug fixes
 ## Releases
-* [Release Notes](https://github.com/Legyver/selexml/blob/master/RELEASE.MD)
+* [Release Notes](https://github.com/Legyver/selexml/blob/master/RELEASE.md)
 ## Licensing
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/Legyver/selexml/blob/master/LICENSE)
