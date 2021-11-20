@@ -1,5 +1,14 @@
 # selexml
-Desktop client for querying XML
+Desktop client and API for querying XML
+
+## Artifacts
+### API
+```gradle
+implementation group: 'com.legyver', name: 'selexml.api', version: '1.0.0.0-alpha-1'
+```
+All the querying as a library without the UI hoopla
+### APP
+The UI desktop client.
 
 ## Mental model
 ### Introduction
@@ -143,4 +152,16 @@ select * from course where instructor = Kaplan and days = T,W and is_full = fals
 ### Bugs
 * Column/Table names should be case-insensitive
 ### New functionality
-* GUI for command execution
+* Allow for saving of result files.
+
+
+## Versioning
+Release.Breaking.Feature.Fix
+- Release: Used for major milestone releases.
+- Breaking: Used when the change breaks backward compatibility.
+- Feature: Used when introducing features that do not break backward compatability.
+- Fix: Used for small bug fixes
+## Releases
+* [Release Notes](https://github.com/Legyver/selexml/blob/master/RELEASE.MD)
+## Licensing
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/Legyver/selexml/blob/master/LICENSE)

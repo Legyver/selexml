@@ -1,5 +1,7 @@
 .gradle
 /build/
+/selexml.api/build/
+/selexml.app/build/
 **/.idea/
 # Ignore Gradle GUI config
 gradle-app.setting
