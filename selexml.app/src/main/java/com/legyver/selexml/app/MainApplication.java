@@ -110,6 +110,7 @@ public class MainApplication extends Application {
             primaryStage.setTitle("Selexml");
             primaryStage.getIcons().add(new Image(MainApplication.class.getResourceAsStream("/legyver_selexml_icon.png")));
             primaryStage.show();
+            logger.info("Selexml initialized");
         } catch (Exception ex) {
             logger.error("Error in MainApplication.start() " + ex.getMessage(), ex);
             System.exit(1);

@@ -3,6 +3,8 @@ plugins {
     id 'application'
 }
 
+apply from: 'https://raw.githubusercontent.com/Legyver/common-build/1.6.1/release.gradle'
+
 group 'com.legyver'
 
 dependencies {

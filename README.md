@@ -4,7 +4,7 @@ Desktop client and API for querying XML
 ## Artifacts
 ### API
 ```gradle
-implementation group: 'com.legyver', name: 'selexml.api', version: '1.0.0.0-alpha-1'
+implementation group: 'com.legyver', name: 'selexml.api', version: '1.0.0.0-alpha-2'
 ```
 All the querying as a library without the UI hoopla
 ### APP
@@ -98,7 +98,7 @@ Commands themselves can be typed in any case, ie: SELECT is the same as select, 
 All conditions must have three parts
 1. column
 2. comparison
-3. value 
+3. value
 
 <table>
 <tr><td>Wrong</td><td>Correct</td></tr>
