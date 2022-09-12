@@ -1,6 +1,6 @@
 package com.legyver.selexml.app.config;
 
-import com.legyver.fenxlib.core.impl.config.JsonApplicationConfig;
+import com.legyver.fenxlib.config.json.JsonApplicationConfig;
 
 import java.util.Map;
 

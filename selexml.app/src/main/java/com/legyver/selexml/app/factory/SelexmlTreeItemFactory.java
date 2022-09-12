@@ -6,14 +6,16 @@ import com.legyver.fenxlib.widgets.filetree.factory.TreeItemChildFactory;
 import com.legyver.fenxlib.widgets.filetree.tree.FileTreeItem;
 import com.legyver.fenxlib.widgets.filetree.tree.TreeFile;
 import com.legyver.fenxlib.widgets.filetree.tree.TreeFolder;
+import com.legyver.selexml.app.ui.widget.status.StatusMonitor;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.control.TabPane;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 
 public class SelexmlTreeItemFactory extends TreeItemChildFactory {
 
-    public SelexmlTreeItemFactory(SuffixFileFilter suffixFileFilter) {
+    public SelexmlTreeItemFactory(SuffixFileFilter suffixFileFilter, TabPane tabPane, StatusMonitor statusMonitor) {
         super(new DefaultFileTreeItemContextMenuFactory(
-            new FileTreeItemContextMenuItemFactory(LaunchWorkbookFactory.MENU_ITEM_NAME, new LaunchWorkbookFactory(suffixFileFilter))
+            new FileTreeItemContextMenuItemFactory(LaunchWorkbookFactory.MENU_ITEM_NAME, new LaunchWorkbookFactory(suffixFileFilter, tabPane, statusMonitor))
         ));
     }
 

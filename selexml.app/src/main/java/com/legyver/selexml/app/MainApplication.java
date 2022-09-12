@@ -1,30 +1,31 @@
 package com.legyver.selexml.app;
 
-import com.legyver.core.exception.CoreException;
-import com.legyver.fenxlib.core.impl.config.options.ApplicationOptions;
-import com.legyver.fenxlib.core.impl.context.ApplicationContext;
-import com.legyver.fenxlib.core.impl.factory.BorderPaneFactory;
-import com.legyver.fenxlib.core.impl.factory.SceneFactory;
-import com.legyver.fenxlib.core.impl.factory.StackPaneRegionFactory;
-import com.legyver.fenxlib.core.impl.factory.TabPaneFactory;
-import com.legyver.fenxlib.core.impl.factory.decorator.RegisterAsDecorator;
-import com.legyver.fenxlib.core.impl.factory.options.BorderPaneInitializationOptions;
-import com.legyver.fenxlib.core.impl.factory.options.RegionInitializationOptions;
+import com.legyver.fenxlib.api.config.options.ApplicationOptions;
+import com.legyver.fenxlib.api.context.ApplicationContext;
+import com.legyver.fenxlib.api.context.ResourceScope;
+import com.legyver.fenxlib.api.controls.ControlsFactory;
+import com.legyver.fenxlib.api.locator.DefaultLocationContext;
+import com.legyver.fenxlib.api.scene.controls.options.TabPaneOptions;
+import com.legyver.fenxlib.core.controls.factory.SceneFactory;
+import com.legyver.fenxlib.core.layout.BorderPaneApplicationLayout;
+import com.legyver.fenxlib.core.layout.options.CenterRegionOptions;
+import com.legyver.fenxlib.core.layout.options.LeftRegionOptions;
+import com.legyver.fenxlib.widgets.filetree.SimpleFileExplorer;
 import com.legyver.fenxlib.widgets.filetree.factory.SimpleFileExplorerFactory;
+import com.legyver.fenxlib.widgets.filetree.factory.SimpleFileExplorerOptions;
 import com.legyver.fenxlib.widgets.filetree.factory.TreeItemChildFactory;
 import com.legyver.fenxlib.widgets.filetree.registry.FileTreeRegistry;
 import com.legyver.fenxlib.widgets.filetree.scan.FileWatchHandler;
 import com.legyver.selexml.app.config.ApplicationOptionsBuilder;
 import com.legyver.selexml.app.config.SelexmlConfig;
-import com.legyver.selexml.app.config.SelexmlVersionInfo;
-import com.legyver.selexml.app.factory.MenuRegionFactory;
+import com.legyver.selexml.app.css.CssResource;
+import com.legyver.selexml.app.factory.MenuBarFactory;
 import com.legyver.selexml.app.factory.SelexmlTreeItemFactory;
 import com.legyver.selexml.app.ui.ApplicationUIModel;
-import com.legyver.selexml.app.ui.widget.status.BottomRegionStatusFactory;
-import com.legyver.selexml.app.ui.widget.store.StoreTabFactory;
+import com.legyver.selexml.app.ui.widget.status.StatusMonitor;
 import javafx.application.Application;
-import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.Scene;
+import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.logging.log4j.LogManager;
@@ -37,15 +38,17 @@ public class MainApplication extends Application {
     public static final String TABS = "_tabs";
     private static Logger logger;
     private static ApplicationOptions applicationOptions;
-    private SelexmlVersionInfo selexmlVersionInfo;
     private ApplicationUIModel uiModel;
 
-    public static void main(String[] args) throws CoreException {
+    public static void main(String[] args) {
         try {
             applicationOptions = new ApplicationOptionsBuilder()
                     .appName("Selexml")
-                    .customAppConfigInstantiator(map -> new SelexmlConfig(map))
+                    .customAppConfigInstantiator(SelexmlConfig::new)
                     .uiModel(new ApplicationUIModel())
+                    .styleSheetUrl(CssResource.getApplicationCSS(), ResourceScope.APPLICATION)
+                    .styleSheetUrl(CssResource.getPopupCSS(), ResourceScope.POPUPS)
+                    .resourceBundle("com.legyver.selexml.app.bundle")
                     .build();//build() calls bootstrap() which inits logging
             logger = LogManager.getLogger(MainApplication.class);
             launch(args);
@@ -60,55 +63,46 @@ public class MainApplication extends Application {
     public void start(Stage primaryStage) {
         try {
             logger.info("Initializing application");
-            applicationOptions.startup();
+            applicationOptions.startup(this, primaryStage);
             uiModel = (ApplicationUIModel) ApplicationContext.getUiModel();
-            selexmlVersionInfo = new SelexmlVersionInfo();
 
             URL stylesheet = MainApplication.class.getResource("application.css");
             if (stylesheet == null) {
                 logger.error("unable to load stylesheet");
             }
-            SceneFactory sceneFactory = new SceneFactory(primaryStage, 1100, 750, stylesheet);
+            SceneFactory sceneFactory = new SceneFactory(primaryStage);
 
             //Any files added via import or filesystem watches on added directories will be added here
             FileTreeRegistry fileTreeRegistry = new FileTreeRegistry();
 
             SuffixFileFilter suffixFileFilter = new SuffixFileFilter(".xml");
-            TreeItemChildFactory treeItemChildFactory = new SelexmlTreeItemFactory(suffixFileFilter);
-
+            TabPane tabPane = ControlsFactory.make(TabPane.class, new TabPaneOptions().name(TABS));
+            StatusMonitor statusMonitor = new StatusMonitor();
+            TreeItemChildFactory treeItemChildFactory = new SelexmlTreeItemFactory(suffixFileFilter, tabPane, statusMonitor);
 
             //while watching file system, only auto-add folders and xml files
             FileWatchHandler fileWatchHandler = new FileWatchHandler.Builder()
                     .fileFilter(suffixFileFilter)
                     .childFactory(treeItemChildFactory)
                     .build(fileTreeRegistry);
+            SimpleFileExplorerOptions simpleFileExplorerOptions = new SimpleFileExplorerOptions()
+                    .fileTreeRegistry(fileTreeRegistry)
+                    .fileWatchHandler(fileWatchHandler);
 
-            BorderPaneInitializationOptions options = new BorderPaneInitializationOptions.Builder()
-                    .left(new RegionInitializationOptions.SideBuilder("Files")
-                            .displayContentByDefault()
-                            .factory(new StackPaneRegionFactory(false,
-                                    new SimpleFileExplorerFactory(fileTreeRegistry, fileWatchHandler)
-                            ))
-                    )
-                    .center(new RegionInitializationOptions.Builder()
-                            .factory(new StackPaneRegionFactory(true,
-                                    new RegisterAsDecorator(new TabPaneFactory(new StoreTabFactory()), TABS)
-                            ))
-                    )
-                    .top(new RegionInitializationOptions.Builder()
-                            .displayContentByDefault()
-                            .factory(new MenuRegionFactory(getSelexmlVersionInfo()))
-                    )
-                    .bottom(new RegionInitializationOptions.SideAwareBuilder()
-                            .factory(new BottomRegionStatusFactory())
-                    )
+            SimpleFileExplorer simpleFileExplorer = new SimpleFileExplorerFactory()
+                    .makeNode(new DefaultLocationContext("Files"), simpleFileExplorerOptions);
+
+            BorderPaneApplicationLayout borderPaneApplicationLayout = new BorderPaneApplicationLayout.BorderPaneBuilder()
+                    .title("selexml.title")
+                    .width(600.0)
+                    .height(800.0)
+                    .menuBar(new MenuBarFactory(getClass()).makeMenuBar())
+                    .leftRegionOptions(new LeftRegionOptions(simpleFileExplorer))
+                    .centerRegionOptions(new CenterRegionOptions(tabPane))
+//                    .bottomRegionControlOptions(new BottomRegionOptions(statusMonitor))
                     .build();
 
-            BorderPane root = new BorderPaneFactory(options).makeBorderPane();
-
-            primaryStage.setScene(sceneFactory.makeScene(root));
-            primaryStage.setTitle("Selexml");
-            primaryStage.getIcons().add(new Image(MainApplication.class.getResourceAsStream("/legyver_selexml_icon.png")));
+            Scene scene = sceneFactory.makeScene(borderPaneApplicationLayout);
             primaryStage.show();
             logger.info("Selexml initialized");
         } catch (Exception ex) {
@@ -116,10 +110,6 @@ public class MainApplication extends Application {
             System.exit(1);
         }
 
-    }
-
-    public SelexmlVersionInfo getSelexmlVersionInfo() {
-        return selexmlVersionInfo;
     }
 
     public ApplicationUIModel getUiModel() {

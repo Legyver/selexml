@@ -1,6 +1,6 @@
 package com.legyver.selexml.app.ui.widget.store;
 
-import com.legyver.fenxlib.core.impl.web.DesktopWeblink;
+import com.legyver.fenxlib.core.web.DesktopWeblink;
 import javafx.scene.control.SkinBase;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;

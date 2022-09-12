@@ -1,6 +1,8 @@
 plugins {
     id 'java'
     id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.11'
+    id 'com.legyver.resource-bundle-i18n' version '1.0.1'
 }
 
 apply from: 'https://raw.githubusercontent.com/Legyver/common-build/1.6.1/release.gradle'
@@ -10,11 +12,12 @@ group 'com.legyver'
 dependencies {
     implementation project(':selexml.api')
 
+    implementation group: 'com.legyver', name: 'fenxlib.config.json', version: fenxlibVersion
+    implementation group: 'com.legyver', name: 'fenxlib.controls.icon', version: fenxlibVersion
     implementation group: 'com.legyver', name: 'fenxlib.extensions.tuktukfx', version: fenxlibVersion
+    implementation group: 'com.legyver', name: 'fenxlib.icons.standard', version: fenxlibVersion
     implementation group: 'com.legyver', name: 'fenxlib.widgets.about', version: fenxlibVersion
     implementation group: 'com.legyver', name: 'fenxlib.widgets.filetree', version: fenxlibVersion
-    implementation group: 'com.legyver', name: 'fenxlib.controls.svg', version: fenxlibVersion
-    implementation group: 'com.legyver', name: 'fenxlib.icons.fa', version: fenxlibVersion
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: commonsLangVersion
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: commonsLogVersion
@@ -25,21 +28,21 @@ dependencies {
 }
 
 application {
-//    mainModule = 'com.legyver.selexml.app' // name defined in module-info.java
+    mainModule = 'com.legyver.selexml.app' // name defined in module-info.java
     mainClass = 'com.legyver.selexml.app.MainApplication'
-}
-
-run {
-    //workaround for https://github.com/sshahine/JFoenix/issues/955
-    jvmArgs = [
-            '--add-opens=java.base/java.lang.reflect=com.jfoenix'
-    ]
 }
 
 test {
     useJUnitPlatform()
 }
 
-java {
-    modularity.inferModulePath = true
+javafx {
+    version = '17.0.2'
+    modules = ['javafx.controls', 'javafx.media', 'javafx.swing', 'javafx.web']
+}
+
+resourceBundleI18n {
+    translationUrl = 'http://localhost:5000'
+    targetLanguages = ['en', 'en_US', 'en_GB', "es", "de", "fr"]
+    bundleName = 'com.legyver.selexml.app.bundle'
 }

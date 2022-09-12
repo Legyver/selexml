@@ -1,4 +1,20 @@
+plugins {
+    id 'com.legyver.build-data' version '1.0.0'
+}
+
 rootProject.name = 'selexml'
 
 include ':selexml.api'
 include ':selexml.app'
+
+buildData {
+    sourceFile = 'version.properties'
+    targetFile = 'selexml.app/src/main/resources/build.properties'
+    transformMap = [
+            'build.date.day' : '${compute.day}',
+            'build.date.month' : '${compute.month-name}',
+            'build.date.year' : '${compute.year}',
+    ]
+    sendToTarget = ['build.version', 'build.date.day', 'build.date.month', 'build.date.year']
+    sendToSource = ['version.buildmeta']
+}

@@ -14,4 +14,6 @@ module com.legyver.selexml.api {
     exports com.legyver.selexml.api.query.select;
     exports com.legyver.selexml.api.query.from;
     exports com.legyver.selexml.api.query;
+
+    provides com.legyver.core.license.LicenseService with com.legyver.selexml.api.license.LicenseServiceImpl;
 }

@@ -1,6 +1,6 @@
 package com.legyver.selexml.app.ui.widget.workspace;
 
-import com.legyver.fenxlib.core.impl.web.DesktopWeblink;
+import com.legyver.fenxlib.core.web.DesktopWeblink;
 import com.legyver.selexml.app.ui.widget.IQueryResult;
 import com.legyver.selexml.app.ui.widget.QueryResultReport;
 import javafx.application.Platform;
