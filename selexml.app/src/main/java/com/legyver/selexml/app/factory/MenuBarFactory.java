@@ -5,6 +5,8 @@ import com.legyver.fenxlib.core.menu.templates.MenuBuilder;
 import com.legyver.fenxlib.core.menu.templates.section.FileExitMenuSection;
 import com.legyver.fenxlib.widgets.about.AboutMenuSection;
 import com.legyver.fenxlib.widgets.about.AboutPageOptions;
+import com.legyver.fenxlib.widgets.filetree.menu.ImportMenuSection;
+import com.legyver.fenxlib.widgets.filetree.registry.FileTreeRegistry;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 
@@ -15,11 +17,12 @@ public class MenuBarFactory {
         this.klass = klass;
     }
 
-    public MenuBar makeMenuBar() throws CoreException {
+    public MenuBar makeMenuBar(FileTreeRegistry fileTreeRegistry) throws CoreException {
         MenuBar menuBar = new MenuBar();
 
         Menu fileMenu = new MenuBuilder()
                 .name("selexml.menu.label.file")
+                .menuSection(new ImportMenuSection(fileTreeRegistry))
                 .menuSection(new FileExitMenuSection())
                 .build();
         menuBar.getMenus().add(fileMenu);

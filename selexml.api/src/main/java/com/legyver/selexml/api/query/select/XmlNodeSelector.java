@@ -1,6 +1,8 @@
 package com.legyver.selexml.api.query.select;
 
 import com.legyver.utils.graphjxml.XmlGraph;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 
@@ -8,6 +10,8 @@ import java.util.Objects;
  * Select node a node based on its name and (optional) type
  */
 public class XmlNodeSelector {
+    private static final Logger logger = LogManager.getLogger(XmlNodeSelector.class);
+
     /**
      * The name of the element or attribute to be queried from
      */
@@ -50,7 +54,14 @@ public class XmlNodeSelector {
      * @return true if it matches
      */
     public boolean matches(XmlGraph node) {
-        return node.getName() != null && node.getName().equalsIgnoreCase(name) && (nodeType == null || nodeType == node.getNodeType());
+        boolean matches =
+                ("*".equals(name) || (
+                        node.getName() != null && node.getName().equalsIgnoreCase(name)
+                )) && (
+                        nodeType == null || nodeType == node.getNodeType()
+                );
+        logger.info("{} type {} matches [{},{}]: {}", node.getName(), node.getNodeType(), name, nodeType, matches);
+        return matches;
     }
 
     @Override

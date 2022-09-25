@@ -182,12 +182,14 @@ public class XmlSearchableGraph {
 
     private XmlGraph findParent(List<XmlNodeSelector> selectNamed, XmlGraph childHierarchy, Predicate<XmlGraph> test) {
         XmlGraph parent = childHierarchy.getParent();
+        List<XmlGraph> children = parent.getChildren();
 
         if (selectNamed != null && !selectNamed.isEmpty()) {
             //create a copy of the parent with only the children we care about
             parent = new XmlGraph(parent.getName(), parent.getParent(), parent.getNodeType());
             parent.accept(childHierarchy);
-            for (XmlGraph child : parent.getChildren()) {
+
+            for (XmlGraph child : children) {
                 for (XmlNodeSelector selector: selectNamed) {
                     if (selector.matches(child)) {
                         parent.accept(child);

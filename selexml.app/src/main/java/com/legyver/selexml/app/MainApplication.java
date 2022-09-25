@@ -16,7 +16,6 @@ import com.legyver.fenxlib.widgets.filetree.factory.SimpleFileExplorerOptions;
 import com.legyver.fenxlib.widgets.filetree.factory.TreeItemChildFactory;
 import com.legyver.fenxlib.widgets.filetree.registry.FileTreeRegistry;
 import com.legyver.fenxlib.widgets.filetree.scan.FileWatchHandler;
-import com.legyver.selexml.app.config.ApplicationOptionsBuilder;
 import com.legyver.selexml.app.config.SelexmlConfig;
 import com.legyver.selexml.app.css.CssResource;
 import com.legyver.selexml.app.factory.MenuBarFactory;
@@ -31,8 +30,6 @@ import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.net.URL;
-
 public class MainApplication extends Application {
 
     public static final String TABS = "_tabs";
@@ -42,7 +39,7 @@ public class MainApplication extends Application {
 
     public static void main(String[] args) {
         try {
-            applicationOptions = new ApplicationOptionsBuilder()
+            applicationOptions = new ApplicationOptions.Builder()
                     .appName("Selexml")
                     .customAppConfigInstantiator(SelexmlConfig::new)
                     .uiModel(new ApplicationUIModel())
@@ -66,10 +63,6 @@ public class MainApplication extends Application {
             applicationOptions.startup(this, primaryStage);
             uiModel = (ApplicationUIModel) ApplicationContext.getUiModel();
 
-            URL stylesheet = MainApplication.class.getResource("application.css");
-            if (stylesheet == null) {
-                logger.error("unable to load stylesheet");
-            }
             SceneFactory sceneFactory = new SceneFactory(primaryStage);
 
             //Any files added via import or filesystem watches on added directories will be added here
@@ -94,9 +87,9 @@ public class MainApplication extends Application {
 
             BorderPaneApplicationLayout borderPaneApplicationLayout = new BorderPaneApplicationLayout.BorderPaneBuilder()
                     .title("selexml.title")
-                    .width(600.0)
-                    .height(800.0)
-                    .menuBar(new MenuBarFactory(getClass()).makeMenuBar())
+                    .width(800.0)
+                    .height(600.0)
+                    .menuBar(new MenuBarFactory(getClass()).makeMenuBar(fileTreeRegistry))
                     .leftRegionOptions(new LeftRegionOptions(simpleFileExplorer))
                     .centerRegionOptions(new CenterRegionOptions(tabPane))
 //                    .bottomRegionControlOptions(new BottomRegionOptions(statusMonitor))

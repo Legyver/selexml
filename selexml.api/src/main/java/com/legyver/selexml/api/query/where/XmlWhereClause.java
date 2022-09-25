@@ -90,6 +90,12 @@ public class XmlWhereClause {
             whereBuilders.add(whereOperationBuilder);
             return whereOperationBuilder;
         }
+
+        public WhereOperationBuilder whereAnyNamed(String named) {
+            WhereOperationBuilder whereOperationBuilder = new WhereOperationBuilder(this, named, null);
+            whereBuilders.add(whereOperationBuilder);
+            return whereOperationBuilder;
+        }
     }
 
     /**

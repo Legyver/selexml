@@ -118,6 +118,7 @@ public class XmlGraphSearchCriteria {
          * @return the where clause builder
          */
         public XmlFromClause.Builder selectAll() {
+            selectBuilder.anyNamed("*");
             return fromClauseBuilder;
         }
     }

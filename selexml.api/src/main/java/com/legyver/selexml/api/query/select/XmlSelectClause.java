@@ -64,6 +64,15 @@ public class XmlSelectClause {
             return this;
         }
 
+        /* Select any matching name
+         * @param elementName the name of the node to select
+         * @return this builder
+         */
+        public Builder anyNamed(String elementName) {
+            this.elementNames.add(new XmlNodeSelector(elementName, null));
+            return this;
+        }
+
         /**
          * Transition to the from clause builder with the provided from text.
          * Will query both elements and attributes

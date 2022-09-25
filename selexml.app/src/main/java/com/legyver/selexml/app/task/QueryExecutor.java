@@ -10,8 +10,6 @@ import com.legyver.selexml.app.ui.widget.QueryResultReport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-
 public class QueryExecutor {
     private static final Logger logger = LogManager.getLogger(QueryExecutor.class);
     private final WorkspaceScope workspaceScope;

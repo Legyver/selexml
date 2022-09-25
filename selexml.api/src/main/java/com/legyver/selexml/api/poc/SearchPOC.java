@@ -31,8 +31,8 @@ public class SearchPOC {
 
         XmlGraphSearchCriteria criteria = new XmlGraphSearchCriteria.Builder()
                 .selectAll()
-                .fromElementNamed("course")
-                .whereElementNamed("instructor")
+                .fromAnyNamed("course")
+                .whereAnyNamed("instructor")
                 .is("Kaplan")
                 .build();
         XmlGraph result = searchableGraph.search(criteria);

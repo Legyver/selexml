@@ -34,11 +34,11 @@
         <root level="ERROR">
             <appender-ref ref="AsyncFile" />
         </root>
-        <Logger name="com.legyver" level="INFO">
-            <appender-ref ref="Console" />
-        </Logger>
-        <Logger name="com.legyver.selexml.ui.search.InMemoryIndex" level="TRACE">
+        <Logger name="com.legyver" level="DEBUG" additivity="false">
             <appender-ref ref="AsyncFile" />
         </Logger>
+<!--        <Logger name="com.legyver.selexml.ui.search.InMemoryIndex" level="TRACE">-->
+<!--            <appender-ref ref="AsyncFile" />-->
+<!--        </Logger>-->
     </Loggers>
 </configuration>

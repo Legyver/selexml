@@ -121,5 +121,16 @@ public class XmlFromClause {
             return whereClauseBuilder.whereAttributeNamed(named);
         }
 
+        /**
+         * Transition to the where clause builder for an attribute named
+         * @param named the name of the attribute
+         * @return the XmlWhereClause builder
+         */
+        public XmlWhereClause.WhereOperationBuilder whereAnyNamed(String named) {
+            return whereClauseBuilder.whereAnyNamed(named);
+        }
+
+
+
     }
 }

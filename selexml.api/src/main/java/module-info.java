@@ -15,5 +15,7 @@ module com.legyver.selexml.api {
     exports com.legyver.selexml.api.query.from;
     exports com.legyver.selexml.api.query;
 
+    requires org.apache.logging.log4j;
+
     provides com.legyver.core.license.LicenseService with com.legyver.selexml.api.license.LicenseServiceImpl;
 }
