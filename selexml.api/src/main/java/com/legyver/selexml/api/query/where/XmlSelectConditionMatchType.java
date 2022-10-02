@@ -98,7 +98,7 @@ public enum XmlSelectConditionMatchType {
     LIKE_IGNORE_CASE {
         @Override
         public boolean matches(String actual, String target) {
-            return new LikeComparator(target, false).matches(actual);
+            return new LikeComparator(target, true).matches(actual);
         }
     };
 

@@ -271,4 +271,57 @@ public class XmlSearchableGraphTest {
         }
     }
 
+    @Test
+    public void selectAllCoursesWhereInstructorLike() throws Exception {
+        {
+            String query = "select * from course where instructor like %Kaplan%";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(4);
+        }
+        {
+            String query = "select * from course where instructor like %aplan%";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(4);
+        }
+        {
+            String query = "select * from course where instructor like Kap%";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(4);
+        }
+        {
+            String query = "select * from course where instructor like kap%";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(0);
+        }
+        {
+            String query = "select * from course where instructor like_ kap%";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(4);
+        }
+        {
+            String query = "SELECT * FROM COURSE WHERE INSTRUCTOR LIKE KAP%";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(0);
+        }
+        {
+            String query = "SELECT * FROM COURSE WHERE INSTRUCTOR LIKE_ KAP%";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(4);
+        }
+    }
+
 }

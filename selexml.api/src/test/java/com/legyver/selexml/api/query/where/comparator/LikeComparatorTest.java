@@ -9,6 +9,13 @@ public class LikeComparatorTest {
     @Test
     public void simpleLike() {
         {
+            LikeComparator likeComparator = new LikeComparator("%Kaplan%", false);
+            assertThat(likeComparator.matches("Kaplan")).isEqualTo(true);
+            assertThat(likeComparator.matches("AK47")).isEqualTo(false);
+            assertThat(likeComparator.matches(null)).isEqualTo(false);
+
+        }
+        {
             LikeComparator likeComparator = new LikeComparator("K%", false);
             assertThat(likeComparator.matches("Kaplan")).isEqualTo(true);
             assertThat(likeComparator.matches("AK47")).isEqualTo(false);
@@ -39,6 +46,16 @@ public class LikeComparatorTest {
     public void caseInsensitiveLike() {
         {
             LikeComparator likeComparator = new LikeComparator("k%", true);
+            assertThat(likeComparator.matches("Kaplan")).isEqualTo(true);
+            assertThat(likeComparator.matches("AK47")).isEqualTo(false);
+        }
+        {
+            LikeComparator likeComparator = new LikeComparator("kap%", true);
+            assertThat(likeComparator.matches("Kaplan")).isEqualTo(true);
+            assertThat(likeComparator.matches("AK47")).isEqualTo(false);
+        }
+        {
+            LikeComparator likeComparator = new LikeComparator("KAP%", true);
             assertThat(likeComparator.matches("Kaplan")).isEqualTo(true);
             assertThat(likeComparator.matches("AK47")).isEqualTo(false);
         }

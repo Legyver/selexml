@@ -44,6 +44,9 @@ public class LikeComparator {
      * @return true if it matches
      */
     public boolean matches(String actual) {
+        if (actual == null) {
+            return false;
+        }
         Matcher matcher = pattern.matcher(actual);
         return matcher.find();
     }
