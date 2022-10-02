@@ -83,6 +83,42 @@ public class XmlSearchableGraphTest {
     }
 
     @Test
+    public void selectAllCoursesWhereInstructorNull() throws Exception {
+        {
+            String query = "select * from course where instructor is null";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(1);
+        }
+        {
+            String query = "SELECT * FROM COURSE WHERE INSTRUCTOR IS NULL";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(1);
+        }
+    }
+
+    @Test
+    public void selectAllCoursesWhereInstructorNotNull() throws Exception {
+        {
+            String query = "select * from course where instructor not null";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(5);
+        }
+        {
+            String query = "SELECT * FROM COURSE WHERE INSTRUCTOR NOT NULL";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(5);
+        }
+    }
+
+    @Test
     public void selectAllCoursesWhereInstructorEquals() throws Exception {
         {
             String query = "select * from course where instructor = Kaplan";
