@@ -30,7 +30,7 @@ public enum XmlSelectConditionMatchType {
     IS_IGNORE_CASE {
         @Override
         public boolean matches(String actual, String target) {
-            return target != null && target.equals(actual);
+            return target != null && target.equalsIgnoreCase(actual);
         }
     },
     /**

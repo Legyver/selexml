@@ -39,7 +39,7 @@ public class XmlSearchableGraph {
         if (level > 0) {
             //don't add the root node
             String name = graphNode.getName();
-            List<ValueNode> valueNodes = nodes.computeIfAbsent(name, x -> new ArrayList<>());
+            List<ValueNode> valueNodes = nodes.computeIfAbsent(name.toUpperCase(), x -> new ArrayList<>());
             valueNodes.add(new ValueNode(graphNode));
 
             //tabulate cohesion data
@@ -283,7 +283,7 @@ public class XmlSearchableGraph {
     }
 
     private void aggregate(List<ValueNode> matches, XmlGraph.NodeType nodeType, String named, XmlSelectConditionMatchType xmlSelectOperation, String value) {
-        List<ValueNode> valueNodes = nodes.get(named);
+        List<ValueNode> valueNodes = nodes.get(named.toUpperCase());
         if (valueNodes != null) {
             valueNodes = valueNodes.stream()
                     .filter(v -> xmlSelectOperation == null || xmlSelectOperation.matches(v.value, value))
@@ -386,7 +386,11 @@ public class XmlSearchableGraph {
             if (g == null) {
                 return false;
             }
-            if (Objects.equals(named, g.getName()) && (nodeType == null || g.getNodeType() == nodeType)) {
+            String named = this.named;
+            if (named != null) {
+                named = named.toUpperCase();
+            }
+            if (Objects.equals(named, g.getName().toUpperCase()) && (nodeType == null || g.getNodeType() == nodeType)) {
                 return true;
             }
             return false;

@@ -45,11 +45,20 @@ public class XmlSearchableGraphTest {
 
     @Test
     public void selectAllCoursesWhereInstructorIs() throws Exception {
-        String query = "select * from course where instructor is Kaplan";
+        {
+            String query = "select * from course where instructor is Kaplan";
 
-        XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
-        XmlGraph graph = xmlSearchableGraph.search(criteria);
-        assertThat(graph.getChildren().size()).isEqualTo(4);
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(4);
+        }
+        {
+            String query = "SELECT * FROM COURSE WHERE INSTRUCTOR IS_ KAPLAN";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(4);
+        }
     }
 
 }

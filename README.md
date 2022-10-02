@@ -4,7 +4,7 @@ Desktop client and API for querying XML
 ## Artifacts
 ### API
 ```gradle
-implementation group: 'com.legyver', name: 'selexml.api', version: '1.0.0.0-alpha-2'
+implementation group: 'com.legyver', name: 'selexml.api', version: '0.1.1'
 ```
 All the querying as a library without the UI hoopla
 ### APP
@@ -64,11 +64,11 @@ So you might be thinking, if both elements and attributes map to tables and colu
 
 Loosely analogous to schemas, pseudo-references allow for filtering to alleviate this.  However, unlike schemas, these can be applied individually to any column or table reference
 * $e is a shortcut for elements
-```roomsql
+```
   select $e:column1, $e:column2 from $e:table where $e:column1 = a value
 ```
 * $a is a shortcut for attributes
-```roomsql
+```
   select $a:column1, $a:column2 from $a:table where $a:column1 = a value
 ```
 
@@ -77,7 +77,7 @@ These can be mixed-and-matched.  If there is no pseudo-reference prefix, both ar
 #### Case-sensitivity
 All comparisons are case-sensitive by default.  Appending an underscore to the command turns off case sensitivity
 
-Commands themselves can be typed in any case, ie: SELECT is the same as select, FROM is the same as from, IS is the same as is, etc.
+Commands themselves can be typed in any case, ie: SELECT is the same as select, FROM is the same as from, IS, is the same as is, etc.
 ##### Supported comparisons
 <table>
 <tr><td>Case sensitive</td><td>example</td><td>Case insensitive</td><td>example</td></tr>
@@ -122,45 +122,41 @@ select reg_num, subj, crs from course
 ### From
 * Select all values from all elements
     * SQL analogy: select * from UNION(select * from table1, select * from table2, ...)
-```roomsql
-select * from *
+```
+select * from *;
 ```
 
 * Select all values from one-or-more elements or attributes
   * SQL analogy: select * from a specific table
-```roomsql
-select * from course
-select * from course, lab, lecture
+```
+select * from course;
+select * from course, lab, lecture;
 ```
 
 * Select all values from specific elements or attributes
-```roomsql
-select * from $e:course
-select * from $a:course
+```
+select * from $e:course;
+select * from $a:course;
 ```
 
 ### Where
 * Select all values meeting one-or-more conditions
   * SQL analogy: where clause in select statements
-```roomsql
-select * from course where instructor = Kaplan
-select * from course where instructor = Kaplan, days = T,W and is_full = false
-select * from course where instructor = Kaplan and days = T,W and is_full = false
+```
+select * from course where instructor = Kaplan;
+select * from course where instructor = Kaplan, days = T,W and is_full = false;
+select * from course where instructor = Kaplan and days = T,W and is_full = false;
 ```
 
 ## Roadmap
 ### Bugs
-* Column/Table names should be case-insensitive
+
 ### New functionality
 * Allow for saving of result files.
 
 
 ## Versioning
-Release.Breaking.Feature.Fix
-- Release: Used for major milestone releases.
-- Breaking: Used when the change breaks backward compatibility.
-- Feature: Used when introducing features that do not break backward compatability.
-- Fix: Used for small bug fixes
+We use [SemVer 2.0](https://semver.org/)
 ## Releases
 * [Release Notes](https://github.com/Legyver/selexml/blob/master/RELEASE.md)
 ## Licensing
