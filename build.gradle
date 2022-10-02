@@ -9,7 +9,7 @@ subprojects {
     ext {
         //legyver dependencies
         fenxlibVersion = '3.0.0-beta.5'
-        legyverUtilsVersion = '3.2.1'
+        legyverUtilsVersion = '3.3.0'
         //apache dependencies
         commonsLogVersion = '2.17.1'
         commonsLangVersion = '3.11'

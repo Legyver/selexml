@@ -82,12 +82,18 @@ public class XmlSearchableGraph {
             resultGraph = new XmlGraph("selexml", null, XmlGraph.NodeType.ELEMENT);
             copyNodesToResultGraph(selectClause, selectFrom, resultGraph, originalGraph.getChildren());
         } else if (filterScenario == FilterScenario.ALL_FROM_INCOHESIVE) {
-            List<ValueNode> matches = filter(criteria.getWhere());
+            List<ValueNode> accumulated = accumulate(xmlFromClause);
+            List<ValueNode> matches = collectWhere(criteria.getWhere(), accumulated);
             //merge all the result nodes into one result graph
             resultGraph = new XmlGraph("selexml", null, XmlGraph.NodeType.ELEMENT);
             copyMatchesToResultGraph(selectClause, selectFrom, resultGraph, matches);
-        } else if (filterScenario == FilterScenario.SEARCH) {
-            List<ValueNode> matches = filter(criteria.getWhere());
+        } else if (filterScenario == FilterScenario.SELECT_FROM) {
+            List<ValueNode> accumulated = accumulate(xmlFromClause);
+            //merge all the result nodes into one result graph
+            resultGraph = new XmlGraph("selexml", null, XmlGraph.NodeType.ELEMENT);
+            copyMatchesToResultGraph(selectClause, selectFrom, resultGraph, accumulated);
+        } else if (filterScenario == FilterScenario.SELECT_FROM_WHERE) {
+            List<ValueNode> matches = collectWhere(criteria.getWhere());
             //merge all the result nodes into one result graph
             resultGraph = new XmlGraph("selexml", null, XmlGraph.NodeType.ELEMENT);
             copyMatchesToResultGraph(selectClause, selectFrom, resultGraph, matches);
@@ -123,8 +129,10 @@ public class XmlSearchableGraph {
                 String named = fromSelector.getName();
                 XmlGraph.NodeType nodeType = fromSelector.getNodeType();
                 //get nodes specified
-                XmlGraph parentGraph = findParent(selectNamed, node, (g) -> named.equals(g.getName()) && (nodeType == null || g.getNodeType() == nodeType));
-                resultGraph.accept(parentGraph);
+                XmlGraph parentGraph = findParent(selectNamed, node, new XmlGraphMatch(named, nodeType));
+                if (parentGraph != null) {
+                    resultGraph.accept(parentGraph);
+                }
             }
         }
     }
@@ -136,18 +144,25 @@ public class XmlSearchableGraph {
      * @return
      */
     private FilterScenario getFilterScenario(XmlGraphSearchCriteria criteria, List<XmlNodeSelector> selectFrom) {
-        FilterScenario filterScenario = FilterScenario.SEARCH;
-        if (criteria.getWhere().getWhereConditions().isEmpty()) {
+        FilterScenario filterScenario;
+        if (!criteria.getWhere().getWhereConditions().isEmpty()) {
+            filterScenario = FilterScenario.SELECT_FROM_WHERE;
+        } else {
             //instead of searching, since we know we're getting everything start with the top nodes and prune down
             //first check if we're pruning at all
 
             if (selectFrom.isEmpty()) {
-                //base case: select * from *;
+                //base case: select *;
+                //not sure if this is a valid scenario
                 filterScenario = FilterScenario.ALL_NO_FROM;
-            } else if (selectFrom.isEmpty() || selectFrom.size() == 1) {
-                //check if the one element is '*', ie: select * from *
+            } else if (selectFrom.size() != 1) {
+                filterScenario = FilterScenario.SELECT_FROM;
+            } else {
                 XmlNodeSelector selector = selectFrom.iterator().next();
-                if (XmlGraphSearchConstants.ALL.equals(selector.getName())) {
+                if (!XmlGraphSearchConstants.ALL.equals(selector.getName())) {
+                    filterScenario = FilterScenario.SELECT_FROM;
+                } else {
+                    //check if the one element is '*', ie: select * from *
                     if (selector.getNodeType() == null) {
                         //select * from *
                         filterScenario = FilterScenario.ALL_NO_FROM;
@@ -169,56 +184,73 @@ public class XmlSearchableGraph {
                         } else {
                             filterScenario = FilterScenario.ALL_FROM_INCOHESIVE;
                         }
+                    } else {
+                        filterScenario = FilterScenario.ALL_NO_FROM;
                     }
-                } else {
-                    filterScenario = FilterScenario.SEARCH;
                 }
-            } else {
-                filterScenario = FilterScenario.SEARCH;
             }
         }
         return filterScenario;
     }
 
+    private boolean isSelectAll(List<XmlNodeSelector> selectNamed) {
+        return selectNamed.isEmpty() || selectNamed.stream()
+                .anyMatch(candidate -> {
+                    return XmlGraphSearchConstants.ALL.equals(candidate.getName()) && candidate.getNodeType() == null;
+                });
+    }
+
     private XmlGraph findParent(List<XmlNodeSelector> selectNamed, XmlGraph childHierarchy, Predicate<XmlGraph> test) {
-        XmlGraph parent = childHierarchy.getParent();
-        List<XmlGraph> children = parent.getChildren();
+        if (childHierarchy == null) {
+            return null;
+        }
 
-        if (selectNamed != null && !selectNamed.isEmpty()) {
-            //create a copy of the parent with only the children we care about
-            parent = new XmlGraph(parent.getName(), parent.getParent(), parent.getNodeType());
-            parent.accept(childHierarchy);
-
-            for (XmlGraph child : children) {
-                for (XmlNodeSelector selector: selectNamed) {
-                    if (selector.matches(child)) {
-                        parent.accept(child);
+        XmlGraph result = childHierarchy.getParent();
+        if (result != null) {
+            if (selectNamed == null || isSelectAll(selectNamed)) {
+                result = childHierarchy;
+            } else {
+                //create a copy of the parent with only the children we care about
+                List<XmlGraph> originalChildren = result.getChildren();
+                result = new XmlGraph(result.getName(), result.getParent(), result.getNodeType());
+                for (XmlGraph child : originalChildren) {
+                    for (XmlNodeSelector selector : selectNamed) {
+                        if (selector.matches(child)) {
+                            result.accept(child);
+                        }
                     }
                 }
             }
         }
 
-        if (!test.test(parent)) {
-            parent = findParent(selectNamed, parent, test);
+        if (!test.test(childHierarchy)) {
+            result = findParent(selectNamed, childHierarchy.getParent(), test);
         }
-        return parent;
+        return result;
     }
 
-    private List<ValueNode> filter(XmlWhereClause xmlWhereClause) {
+    private List<ValueNode> accumulate(XmlFromClause xmlFromClause) {
         List<ValueNode> matches = new ArrayList<>();
-//        if (xmlWhereClause.getWhereConditions().isEmpty()) {
-//            for (String key : nodes.keySet()) {
-//                //just add top-level nodes
-//                List<ValueNode> valueNodes = nodes.get(key);
-//                for (ValueNode valueNode : valueNodes) {
-//                    XmlGraph graph = valueNode.node;
-//                    if (graph.getParent() != null && graph.getParent().getParent() == null) {
-//                        aggregate(matches, null, key, null, null);
-//                    }
-//                }
-//            }
-//        }
+        for (String key : nodes.keySet()) {
+            List<ValueNode> valueNodes = nodes.get(key);
+            for (ValueNode valueNode : valueNodes) {
+                XmlGraph graph = valueNode.node;
+                if (xmlFromClause.getXmlNodeSelectors().isEmpty()) {
+                    matches.add(valueNode);
+                } else {
+                    for (XmlNodeSelector xmlNodeSelector: xmlFromClause.getXmlNodeSelectors()) {
+                        if (xmlNodeSelector.matches(graph)) {
+                            matches.add(valueNode);
+                        }
+                    }
+                }
+            }
+        }
+        return matches;
+    }
 
+    private List<ValueNode> collectWhere(XmlWhereClause xmlWhereClause) {
+        List<ValueNode> matches = new ArrayList<>();
         for (XmlWhereCondition xmlWhereCondition : xmlWhereClause.getWhereConditions()) {
             XmlNodeSelector xmlNodeSelector = xmlWhereCondition.getXmlNodeSelector();
             String named = xmlNodeSelector.getName();
@@ -228,6 +260,26 @@ public class XmlSearchableGraph {
             aggregate(matches, nodeType, named, xmlSelectOperation, value);
         }
         return matches;
+    }
+
+    private List<ValueNode> collectWhere(XmlWhereClause xmlWhereClause, List<ValueNode> accumulated) {
+        if (!xmlWhereClause.getWhereConditions().isEmpty()) {
+            for (Iterator<ValueNode> valueIt = accumulated.iterator(); valueIt.hasNext();) {
+                ValueNode v = valueIt.next();
+                for (XmlWhereCondition xmlWhereCondition : xmlWhereClause.getWhereConditions()) {
+                    XmlNodeSelector xmlNodeSelector = xmlWhereCondition.getXmlNodeSelector();
+                    String named = xmlNodeSelector.getName();
+                    XmlGraph.NodeType nodeType = xmlNodeSelector.getNodeType();
+                    String value = xmlWhereCondition.getValue();
+                    XmlSelectConditionMatchType xmlSelectOperation = xmlWhereCondition.getMatchCondition();
+                    if (xmlSelectOperation != null && !xmlSelectOperation.matches(v.value, value)) {
+                        valueIt.remove();
+                    }
+                }
+            }
+        }
+
+        return accumulated;
     }
 
     private void aggregate(List<ValueNode> matches, XmlGraph.NodeType nodeType, String named, XmlSelectConditionMatchType xmlSelectOperation, String value) {
@@ -284,10 +336,60 @@ public class XmlSearchableGraph {
     }
 
     private enum FilterScenario {
+        /**
+         * select *; not sure if this is valid
+         * or
+         * select * from *;
+         */
         ALL_NO_FROM,
+        /**
+         * select * from $e:*
+         * where all first order nodes are elements
+         */
         ALL_FROM_COHESIVE_ELEMENTS,
+        /**
+         * select * from $a:*
+         * where all first order nodes are attributes
+         */
         ALL_FROM_COHESIVE_ATTRIBUTES,
+        /**
+         * select * from $e:*
+         * or
+         * select * from $a:*
+         * where they're a mixed bag
+         */
         ALL_FROM_INCOHESIVE,
-        SEARCH
+        /**
+         * select * from name
+         * select * from $a:name
+         * select * from $e:name
+         * etc
+         */
+        SELECT_FROM,
+        /**
+         * select * from name where ...
+         */
+        SELECT_FROM_WHERE
+    }
+
+    private class XmlGraphMatch implements Predicate<XmlGraph> {
+        private final String named;
+        private final XmlGraph.NodeType nodeType;
+
+        private XmlGraphMatch(String named, XmlGraph.NodeType nodeType) {
+            this.named = named;
+            this.nodeType = nodeType;
+        }
+
+        @Override
+        public boolean test(XmlGraph g) {
+            if (g == null) {
+                return false;
+            }
+            if (Objects.equals(named, g.getName()) && (nodeType == null || g.getNodeType() == nodeType)) {
+                return true;
+            }
+            return false;
+        }
     }
 }

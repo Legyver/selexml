@@ -1,0 +1,117 @@
+<?xml version='1.0' ?>
+<!DOCTYPE root SYSTEM "http://www.cs.washington.edu/research/projects/xmltk/xmldata/data/courses/reed.dtd">
+<root>
+    <course>
+        <reg_num>10624</reg_num>
+        <subj>BIOL</subj>
+        <crs>431</crs>
+        <sect>F01</sect>
+        <title>Field Biology of Amphibians</title>
+        <credit>0.5</credit>
+        <section><instructor>Kaplan</instructor>
+            <days>T</days>
+            <times>
+                <start>06:10PM</start>
+                <end>08:00</end>
+            </times>
+            <place>
+                <building>PHYSIC</building>
+                <room>240A</room>
+            </place></section>
+    </course>
+
+    <course>
+        <reg_num>10626</reg_num>
+        <subj>BIOL</subj>
+        <crs>431</crs>
+        <sect>F03</sect>
+        <title>Bacterial Pathogenesis</title>
+        <credit>0.5</credit>
+        <section><instructor></instructor>
+            <days></days>
+            <times>
+                <start></start>
+                <end></end>
+            </times>
+            <place>
+                <building></building>
+                <room>Mellies         RESCHEDULED TO OTHER SEMESTER</room>
+            </place></section>
+    </course>
+
+    <course>
+        <reg_num>20606</reg_num>
+        <subj>BIOL</subj>
+        <crs>366</crs>
+        <sect>S</sect>
+        <title>Population Bio:Ecolgy and Evolutn</title>
+        <credit>1.0</credit>
+        <section><instructor>Kaplan</instructor>
+            <days>T-Th</days>
+            <times>
+                <start>09:00AM</start>
+                <end>10:20</end>
+            </times>
+            <place>
+                <building>PHYSIC</building>
+                <room>240A</room>
+            </place></section>
+    </course>
+
+    <course>
+        <reg_num>20608</reg_num>
+        <subj>BIOL</subj>
+        <crs>366</crs>
+        <sect>SL1</sect>
+        <title>Population Bio:Ecolgy and Evolutn</title>
+        <credit>0.0</credit>
+        <section><instructor>Kaplan</instructor>
+            <days>T</days>
+            <times>
+                <start>02:40PM</start>
+                <end>05:00</end>
+            </times>
+            <place>
+                <building>BIOL</building>
+                <room>211</room>
+            </place></section>
+    </course>
+
+    <course>
+        <reg_num>20610</reg_num>
+        <subj>BIOL</subj>
+        <crs>366</crs>
+        <sect>SL2</sect>
+        <title>Population Bio:Ecolgy and Evolutn</title>
+        <credit>0.0</credit>
+        <section><instructor>Kaplan</instructor>
+            <days>Th</days>
+            <times>
+                <start>01:30PM</start>
+                <end>04:00</end>
+            </times>
+            <place>
+                <building>BIOL</building>
+                <room>211</room>
+            </place></section>
+    </course>
+
+    <course>
+        <reg_num>10779</reg_num>
+        <subj>BIOL</subj>
+        <crs>388</crs>
+        <sect>FL2</sect>
+        <title>Evolutionary Biology</title>
+        <credit>0.0</credit>
+        <section><instructor>Raubeson</instructor>
+            <days>F</days>
+            <times>
+                <start>01:10PM</start>
+                <end>05:00</end>
+            </times>
+            <place>
+                <building>PHYSIC</building>
+                <room>134</room>
+            </place></section>
+    </course>
+</root>
