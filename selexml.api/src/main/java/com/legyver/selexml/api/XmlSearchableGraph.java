@@ -390,7 +390,11 @@ public class XmlSearchableGraph {
             if (named != null) {
                 named = named.toUpperCase();
             }
-            if (Objects.equals(named, g.getName().toUpperCase()) && (nodeType == null || g.getNodeType() == nodeType)) {
+            String otherNamed = g.getName();
+            if (otherNamed != null) {
+                otherNamed = otherNamed.toUpperCase();
+            }
+            if (Objects.equals(named, otherNamed) && (nodeType == null || g.getNodeType() == nodeType)) {
                 return true;
             }
             return false;

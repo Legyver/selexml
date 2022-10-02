@@ -53,11 +53,146 @@ public class XmlSearchableGraphTest {
             assertThat(graph.getChildren().size()).isEqualTo(4);
         }
         {
+            String query = "select * from course where instructor is kaplan";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(0);
+        }
+        {
+            String query = "select * from course where instructor is_ kaplan";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(4);
+        }
+        {
+            String query = "SELECT * FROM COURSE WHERE INSTRUCTOR IS KAPLAN";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(0);
+        }
+        {
             String query = "SELECT * FROM COURSE WHERE INSTRUCTOR IS_ KAPLAN";
 
             XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
             XmlGraph graph = xmlSearchableGraph.search(criteria);
             assertThat(graph.getChildren().size()).isEqualTo(4);
+        }
+    }
+
+    @Test
+    public void selectAllCoursesWhereInstructorNot() throws Exception {
+        {
+            String query = "select * from course where instructor not Kaplan";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(2);
+        }
+        {
+            String query = "select * from course where instructor not kaplan";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(6);
+        }
+        {
+            String query = "select * from course where instructor not_ kaplan";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(2);
+        }
+        {
+            String query = "SELECT * FROM COURSE WHERE INSTRUCTOR NOT KAPLAN";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(6);
+        }
+        {
+            String query = "SELECT * FROM COURSE WHERE INSTRUCTOR NOT_ KAPLAN";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(2);
+        }
+    }
+
+    @Test
+    public void selectAllCoursesWhereInstructorNotEqual() throws Exception {
+        {
+            String query = "select * from course where instructor != Kaplan";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(2);
+        }
+        {
+            String query = "select * from course where instructor != kaplan";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(6);
+        }
+        {
+            String query = "select * from course where instructor !=_ kaplan";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(2);
+        }
+        {
+            String query = "SELECT * FROM COURSE WHERE INSTRUCTOR != KAPLAN";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(6);
+        }
+        {
+            String query = "SELECT * FROM COURSE WHERE INSTRUCTOR !=_ KAPLAN";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(2);
+        }
+        //same as above but with <> instead of !=
+        {
+            String query = "select * from course where instructor <> Kaplan";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(2);
+        }
+        {
+            String query = "select * from course where instructor <> kaplan";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(6);
+        }
+        {
+            String query = "select * from course where instructor <>_ kaplan";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(2);
+        }
+        {
+            String query = "SELECT * FROM COURSE WHERE INSTRUCTOR <> KAPLAN";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(6);
+        }
+        {
+            String query = "SELECT * FROM COURSE WHERE INSTRUCTOR <>_ KAPLAN";
+
+            XmlGraphSearchCriteria criteria = sqlSyntaxInterpreter.parse(query);
+            XmlGraph graph = xmlSearchableGraph.search(criteria);
+            assertThat(graph.getChildren().size()).isEqualTo(2);
         }
     }
 

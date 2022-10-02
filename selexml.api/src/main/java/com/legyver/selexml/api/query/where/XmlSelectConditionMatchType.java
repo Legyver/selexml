@@ -58,9 +58,13 @@ public enum XmlSelectConditionMatchType {
         @Override
         public boolean matches(String actual, String target) {
             if (actual == null) {
-                return false;
+                if (target == null) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
-            return actual.equals(target);
+            return !actual.equals(target);
         }
     },
     /**
@@ -70,7 +74,11 @@ public enum XmlSelectConditionMatchType {
         @Override
         public boolean matches(String actual, String target) {
             if (actual == null) {
-                return false;
+                if (target == null) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
             return !actual.equalsIgnoreCase(target);
         }
