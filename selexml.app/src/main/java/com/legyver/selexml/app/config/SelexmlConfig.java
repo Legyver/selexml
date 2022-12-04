@@ -1,16 +1,18 @@
 package com.legyver.selexml.app.config;
 
-import com.legyver.fenxlib.config.json.JsonApplicationConfig;
+import com.legyver.fenxlib.api.config.section.ConfigPersisted;
+import com.legyver.fenxlib.widgets.filetree.config.FileTreeConfig;
 
-import java.util.Map;
+public class SelexmlConfig extends FileTreeConfig {
 
-public class SelexmlConfig extends JsonApplicationConfig {
-    /**
-     * Construct an Application Config the will marshall the config to-from JSON
-     *
-     * @param map the map of values to save
-     */
-    public SelexmlConfig(Map map) {
-        super(map);
+    @ConfigPersisted
+    private SelexmlConfigSection selexmlConfig = new SelexmlConfigSection();
+
+    public SelexmlConfigSection getSelexmlConfig() {
+        return selexmlConfig;
+    }
+
+    public void setSelexmlConfig(SelexmlConfigSection selexmlConfig) {
+        this.selexmlConfig = selexmlConfig;
     }
 }

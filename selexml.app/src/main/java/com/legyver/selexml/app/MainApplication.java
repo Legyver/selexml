@@ -30,6 +30,8 @@ import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Properties;
+
 public class MainApplication extends Application {
 
     public static final String TABS = "_tabs";
@@ -39,9 +41,12 @@ public class MainApplication extends Application {
 
     public static void main(String[] args) {
         try {
+            Properties properties = new Properties();
+            properties.load(MainApplication.class.getResourceAsStream("/build.properties"));
             applicationOptions = new ApplicationOptions.Builder()
                     .appName("Selexml")
-                    .customAppConfigInstantiator(SelexmlConfig::new)
+                    .applicationConfigClass(SelexmlConfig.class)
+                    .buildProperties(properties)
                     .uiModel(new ApplicationUIModel())
                     .styleSheetUrl(CssResource.getApplicationCSS(), ResourceScope.APPLICATION)
                     .styleSheetUrl(CssResource.getPopupCSS(), ResourceScope.POPUPS)

@@ -3,6 +3,7 @@ plugins {
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.11'
     id 'com.legyver.resource-bundle-i18n' version '1.0.1'
+    id 'com.legyver.legacy-java-module-info' version '1.0.0'
 }
 
 apply from: 'https://raw.githubusercontent.com/Legyver/common-build/1.6.1/release.gradle'
@@ -45,4 +46,10 @@ resourceBundleI18n {
     translationUrl = 'http://localhost:5000'
     targetLanguages = ['en', 'en_US', 'en_GB', "es", "de", "fr"]
     bundleName = 'com.legyver.selexml.app.bundle'
+}
+
+legacyJavaModuleInfo {
+    automaticModule('json-path-2.7.0.jar', 'com.jayway.jsonpath')
+    automaticModule('json-smart-2.4.7.jar', 'net.minidev.json')
+    automaticModule('accessors-smart-2.4.7.jar', 'net.minidev.accessors')
 }
