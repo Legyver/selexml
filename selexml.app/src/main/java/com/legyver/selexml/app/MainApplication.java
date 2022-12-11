@@ -6,6 +6,7 @@ import com.legyver.fenxlib.api.context.ResourceScope;
 import com.legyver.fenxlib.api.controls.ControlsFactory;
 import com.legyver.fenxlib.api.locator.DefaultLocationContext;
 import com.legyver.fenxlib.api.scene.controls.options.TabPaneOptions;
+import com.legyver.fenxlib.api.scene.controls.options.TreeViewOptions;
 import com.legyver.fenxlib.core.controls.factory.SceneFactory;
 import com.legyver.fenxlib.core.layout.BorderPaneApplicationLayout;
 import com.legyver.fenxlib.core.layout.options.CenterRegionOptions;
@@ -24,6 +25,7 @@ import com.legyver.selexml.app.ui.ApplicationUIModel;
 import com.legyver.selexml.app.ui.widget.status.StatusMonitor;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
@@ -83,7 +85,11 @@ public class MainApplication extends Application {
                     .fileFilter(suffixFileFilter)
                     .childFactory(treeItemChildFactory)
                     .build(fileTreeRegistry);
+            TreeViewOptions treeViewOptions = new TreeViewOptions()
+                    .selectionMode(SelectionMode.MULTIPLE);
             SimpleFileExplorerOptions simpleFileExplorerOptions = new SimpleFileExplorerOptions()
+                    .name("_XmlFileTree_")
+                    .treeViewOptions(treeViewOptions)
                     .fileTreeRegistry(fileTreeRegistry)
                     .fileWatchHandler(fileWatchHandler);
 

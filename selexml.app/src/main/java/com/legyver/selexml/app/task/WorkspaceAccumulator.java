@@ -16,9 +16,13 @@ public class WorkspaceAccumulator {
         this.suffixFileFilter = suffixFileFilter;
     }
 
-    public List<File> filter(FileTreeItem fileTreeItem) {
+    public List<File> filter(List<FileTreeItem> fileTreeItems) {
         List<File> filesInScope = new ArrayList<>();
-        accumulateRecursive(filesInScope, fileTreeItem);
+        if (fileTreeItems != null) {
+            for (FileTreeItem fileTreeItem: fileTreeItems) {
+                accumulateRecursive(filesInScope, fileTreeItem);
+            }
+        }
         return filesInScope;
     }
 
