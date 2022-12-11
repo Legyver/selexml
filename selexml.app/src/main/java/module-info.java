@@ -13,6 +13,8 @@ module com.legyver.selexml.app {
     requires org.apache.logging.log4j;
     requires com.legyver.selexml.api;
     requires com.legyver.utils.graphjxml;
+    requires com.legyver.fenxlib.controls.svg;
+    requires fenxlib.icons.standard;
 
     exports com.legyver.selexml.app to javafx.graphics;
     exports com.legyver.selexml.app.config to com.fasterxml.jackson.databind, com.legyver.utils.ruffles;

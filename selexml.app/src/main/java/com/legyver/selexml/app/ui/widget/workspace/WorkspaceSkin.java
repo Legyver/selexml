@@ -12,6 +12,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 public class WorkspaceSkin extends SkinBase<Workspace> {
     private final VBox vBox;
     private final ListView listView;
@@ -21,16 +23,20 @@ public class WorkspaceSkin extends SkinBase<Workspace> {
         vBox = new VBox();
         this.listView = new ListView();
 
-        WorkspaceEntry workspaceEntry = new WorkspaceEntry();
-        vBox.getChildren().add(workspaceEntry);
+        WorkspaceControl workspaceControl = new WorkspaceControl();
+        vBox.getChildren().add(workspaceControl);
         vBox.getChildren().add(listView);
 
-        workspaceEntry.pulseProperty().addListener(new ChangeListener<Boolean>() {
+        workspaceControl.pulseProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (newValue != oldValue) {
                    Platform.runLater(() -> {
-                       workspace.executeQuery(workspaceEntry.getText());
+                       String selectedText = workspaceControl.getSelectedText();
+                       if (isEmpty(selectedText)) {
+                           selectedText = workspaceControl.getText();
+                       }
+                       workspace.executeQuery(selectedText);
                    });
                 }
             }
@@ -45,7 +51,7 @@ public class WorkspaceSkin extends SkinBase<Workspace> {
                     TextFlow textFlow = new TextFlow();
                     Text text = new Text(queryResultReport.getResultSize() + " matches.  ");
                     textFlow.getChildren().add(text);
-                    Text queryText = new Text(workspaceEntry.getText());
+                    Text queryText = new Text(workspaceControl.getText());
                     textFlow.getChildren().add(queryText);
 
                     DesktopWeblink desktopWeblink = new DesktopWeblink("See result XML", queryResultReport.getUri());

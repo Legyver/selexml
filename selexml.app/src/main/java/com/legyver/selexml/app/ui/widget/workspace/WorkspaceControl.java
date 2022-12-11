@@ -4,20 +4,17 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 
-public class WorkspaceEntry extends Control {
-    private final ObservableList<Node> workspaceNodes = FXCollections.observableArrayList();
+public class WorkspaceControl extends Control {
     private final StringProperty text = new SimpleStringProperty();
     private final BooleanProperty pulse = new SimpleBooleanProperty();
+    private final StringProperty selectedText = new SimpleStringProperty();
 
     @Override
     protected Skin<?> createDefaultSkin() {
-        return new WorkspaceEntrySkin(this);
+        return new WorkspaceControlSkin(this);
     }
 
     public String getText() {
@@ -32,10 +29,6 @@ public class WorkspaceEntry extends Control {
         this.text.set(text);
     }
 
-    public ObservableList<Node> workspaceNodesProperty() {
-        return workspaceNodes;
-    }
-
     public boolean isPulse() {
         return pulse.get();
     }
@@ -46,5 +39,17 @@ public class WorkspaceEntry extends Control {
 
     public void setPulse(boolean pulse) {
         this.pulse.set(pulse);
+    }
+
+    public String getSelectedText() {
+        return selectedText.get();
+    }
+
+    public StringProperty selectedTextProperty() {
+        return selectedText;
+    }
+
+    public void setSelectedText(String selectedText) {
+        this.selectedText.set(selectedText);
     }
 }

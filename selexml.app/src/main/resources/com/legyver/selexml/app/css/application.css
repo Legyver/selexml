@@ -7,7 +7,7 @@
 
 .button {
 	-fx-padding: 0.7em 0.57em;
-	-fx-font-size: 14px;
+	-fx-font-size: 16px;
 }
 
 .button-raised {
@@ -43,4 +43,9 @@
     -fx-text-fill: #03A9F4;
     -fx-font-weight: BOLD;
     -fx-padding: 0.7em 0.8em;
+}
+
+#workspace-control-controls-box {
+	-fx-background-color: derive(-fx-base, 70%)
+
 }
