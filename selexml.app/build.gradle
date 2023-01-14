@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.11'
-    id 'com.legyver.resource-bundle-i18n' version '1.0.1'
+    id 'com.legyver.resource-bundle-i18n' version '1.0.4'
     id 'com.legyver.legacy-java-module-info' version '1.0.0'
 }
 
@@ -43,7 +43,7 @@ javafx {
 }
 
 resourceBundleI18n {
-    translationUrl = 'http://localhost:5000'
+    translationUrl = 'https://translate.argosopentech.com/'
     targetLanguages = ['en', 'en_US', 'en_GB', "es", "de", "fr"]
     bundleName = 'com.legyver.selexml.app.bundle'
 }
